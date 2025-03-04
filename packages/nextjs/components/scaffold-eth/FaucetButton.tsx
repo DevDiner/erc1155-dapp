@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { createWalletClient, http, parseEther } from "viem";
 import { hardhat } from "viem/chains";
 import { useAccount } from "wagmi";
@@ -8,26 +8,33 @@ import { BanknotesIcon } from "@heroicons/react/24/outline";
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { useWatchBalance } from "~~/hooks/scaffold-eth/useWatchBalance";
 
-// Number of ETH faucet sends to an address
-const NUM_OF_ETH = "1";
-const FAUCET_ADDRESS = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
-
+/**
+ * Single Hardhat client for local usage
+ */
 const localWalletClient = createWalletClient({
   chain: hardhat,
   transport: http(),
 });
 
-/**
- * FaucetButton button which lets you grab eth.
- */
-export const FaucetButton = () => {
-  const { address, chain: ConnectedChain } = useAccount();
+const FAUCET_ADDRESS = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
+const NUM_OF_ETH = "1";
 
+export const FaucetButton = () => {
+  /**
+   * 1) Always define Hooks at the top
+   */
+  const { address, chain: connectedChain } = useAccount();
   const { data: balance } = useWatchBalance({ address });
 
   const [loading, setLoading] = useState(false);
-
   const faucetTxn = useTransactor(localWalletClient);
+
+  /**
+   * 2) Conditionally return null AFTER the hooks
+   */
+  if (connectedChain?.id !== hardhat.id) {
+    return null;
+  }
 
   const sendETH = async () => {
     if (!address) return;
@@ -40,15 +47,10 @@ export const FaucetButton = () => {
       });
       setLoading(false);
     } catch (error) {
-      console.error("⚡️ ~ file: FaucetButton.tsx:sendETH ~ error", error);
+      console.error("Error sending 1 ETH from faucet:", error);
       setLoading(false);
     }
   };
-
-  // Render only on local chain
-  if (ConnectedChain?.id !== hardhat.id) {
-    return null;
-  }
 
   const isBalanceZero = balance && balance.value === 0n;
 
@@ -59,14 +61,19 @@ export const FaucetButton = () => {
           ? "ml-1"
           : "ml-1 tooltip tooltip-bottom tooltip-secondary tooltip-open font-bold before:left-auto before:transform-none before:content-[attr(data-tip)] before:right-0"
       }
-      data-tip="Grab funds from faucet"
+      data-tip="Get 1 ETH from local faucet"
     >
-      <button className="btn btn-secondary btn-sm px-2 rounded-full" onClick={sendETH} disabled={loading}>
+      <button
+        onClick={sendETH}
+        disabled={loading}
+        className="inline-flex px-6 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-xl font-semibold text-sm text-gray-100 hover:opacity-90 transition-colors flex items-center gap-2"
+      >
         {!loading ? (
           <BanknotesIcon className="h-4 w-4" />
         ) : (
           <span className="loading loading-spinner loading-xs"></span>
         )}
+        <span>Quick 1 ETH</span>
       </button>
     </div>
   );

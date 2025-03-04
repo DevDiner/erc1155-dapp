@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Address as AddressType, createWalletClient, http, parseEther } from "viem";
 import { hardhat } from "viem/chains";
 import { useAccount } from "wagmi";
@@ -9,28 +9,33 @@ import { Address, AddressInput, Balance, EtherInput } from "~~/components/scaffo
 import { useTransactor } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 
-// Account index to use from generated hardhat accounts.
-const FAUCET_ACCOUNT_INDEX = 0;
-
+/**
+ * Create a single Hardhat wallet client at the top (not conditionally).
+ * This points to http://127.0.0.1:8545 by default.
+ */
 const localWalletClient = createWalletClient({
   chain: hardhat,
   transport: http(),
 });
 
-/**
- * Faucet modal which lets you send ETH to any address.
- */
+const FAUCET_ACCOUNT_INDEX = 0;
+
 export const Faucet = () => {
+  /**
+   * 1) Always call Hooks at the top:
+   *    - `useAccount()`, `useState()`, `useEffect()`, etc.
+   */
+  const { chain: connectedChain } = useAccount();
+
   const [loading, setLoading] = useState(false);
   const [inputAddress, setInputAddress] = useState<AddressType>();
   const [faucetAddress, setFaucetAddress] = useState<AddressType>();
   const [sendValue, setSendValue] = useState("");
 
-  const { chain: ConnectedChain } = useAccount();
-
   const faucetTxn = useTransactor(localWalletClient);
 
   useEffect(() => {
+    // Fetch the default Hardhat account on component mount
     const getFaucetAddress = async () => {
       try {
         const accounts = await localWalletClient.getAddresses();
@@ -38,26 +43,35 @@ export const Faucet = () => {
       } catch (error) {
         notification.error(
           <>
-            <p className="font-bold mt-0 mb-1">Cannot connect to local provider</p>
+            <p className="font-bold mt-0 mb-1">Cannot connect to local Hardhat provider</p>
             <p className="m-0">
-              - Did you forget to run <code className="italic bg-base-300 text-base font-bold">yarn chain</code> ?
+              - Did you forget to run <code className="italic">yarn chain</code>?
             </p>
             <p className="mt-1 break-normal">
-              - Or you can change <code className="italic bg-base-300 text-base font-bold">targetNetwork</code> in{" "}
-              <code className="italic bg-base-300 text-base font-bold">scaffold.config.ts</code>
+              - Or remove <code className="italic">hardhat</code> from{" "}
+              <code className="italic">scaffold.config.ts</code> if not using local
             </p>
           </>,
         );
-        console.error("⚡️ ~ file: Faucet.tsx:getFaucetAddress ~ error", error);
+        console.error("Error in getFaucetAddress:", error);
       }
     };
     getFaucetAddress();
   }, []);
 
+  /**
+   * 2) AFTER declaring hooks, we can conditionally return:
+   *    If user is not on Hardhat, hide the faucet UI entirely.
+   */
+  if (connectedChain?.id !== hardhat.id) {
+    return null;
+  }
+
+  /**
+   * 3) The logic to send ETH from Hardhat to an input address.
+   */
   const sendETH = async () => {
-    if (!faucetAddress || !inputAddress) {
-      return;
-    }
+    if (!faucetAddress || !inputAddress) return;
     try {
       setLoading(true);
       await faucetTxn({
@@ -69,40 +83,45 @@ export const Faucet = () => {
       setInputAddress(undefined);
       setSendValue("");
     } catch (error) {
-      console.error("⚡️ ~ file: Faucet.tsx:sendETH ~ error", error);
+      console.error("Error sending ETH from faucet:", error);
       setLoading(false);
     }
   };
 
-  // Render only on local chain
-  if (ConnectedChain?.id !== hardhat.id) {
-    return null;
-  }
-
+  /**
+   * 4) Render the faucet UI if on chain 31337.
+   */
   return (
     <div>
-      <label htmlFor="faucet-modal" className="btn btn-primary btn-sm font-normal gap-1">
+      {/* Button to open the Hardhat faucet modal */}
+      <label
+        htmlFor="faucet-modal"
+        className="px-6 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-xl font-semibold text-sm text-gray-100 hover:opacity-90 transition-colors flex items-center gap-2"
+      >
         <BanknotesIcon className="h-4 w-4" />
-        <span>Faucet</span>
+        <span>Open Hardhat Faucet</span>
       </label>
+
+      {/* The modal itself */}
       <input type="checkbox" id="faucet-modal" className="modal-toggle" />
       <label htmlFor="faucet-modal" className="modal cursor-pointer">
-        <label className="modal-box relative">
-          {/* dummy input to capture event onclick on modal box */}
-          <input className="h-0 w-0 absolute top-0 left-0" />
-          <h3 className="text-xl font-bold mb-3">Local Faucet</h3>
-          <label htmlFor="faucet-modal" className="btn btn-ghost btn-sm btn-circle absolute right-3 top-3">
+        <label className="modal-box relative bg-[#1E293B] text-gray-100 border border-gray-600 max-w-sm w-full">
+          <label
+            htmlFor="faucet-modal"
+            className="btn btn-ghost btn-sm btn-circle absolute right-3 top-3 text-gray-100"
+          >
             ✕
           </label>
+          <h3 className="text-xl font-bold mb-3">Local Faucet</h3>
           <div className="space-y-3">
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 items-center">
               <div>
                 <span className="text-sm font-bold">From:</span>
                 <Address address={faucetAddress} onlyEnsOrAddress />
               </div>
               <div>
                 <span className="text-sm font-bold pl-3">Available:</span>
-                <Balance address={faucetAddress} />
+                <Balance address={faucetAddress} className="ml-2" />
               </div>
             </div>
             <div className="flex flex-col space-y-3">
@@ -111,12 +130,16 @@ export const Faucet = () => {
                 value={inputAddress ?? ""}
                 onChange={value => setInputAddress(value as AddressType)}
               />
-              <EtherInput placeholder="Amount to send" value={sendValue} onChange={value => setSendValue(value)} />
-              <button className="h-10 btn btn-primary btn-sm px-2 rounded-full" onClick={sendETH} disabled={loading}>
-                {!loading ? (
-                  <BanknotesIcon className="h-6 w-6" />
+              <EtherInput placeholder="Amount to send" value={sendValue} onChange={setSendValue} />
+              <button
+                onClick={sendETH}
+                disabled={loading}
+                className="px-6 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-xl font-semibold text-sm text-gray-100 hover:opacity-90 transition-colors flex items-center gap-2"
+              >
+                {loading ? (
+                  <span className="loading loading-spinner loading-sm" />
                 ) : (
-                  <span className="loading loading-spinner loading-sm"></span>
+                  <BanknotesIcon className="h-5 w-5" />
                 )}
                 <span>Send</span>
               </button>

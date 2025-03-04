@@ -1,80 +1,127 @@
-# 🏗 Scaffold-ETH 2
 
-<h4 align="center">
-  <a href="https://docs.scaffoldeth.io">Documentation</a> |
-  <a href="https://scaffoldeth.io">Website</a>
-</h4>
+# Token Forge
 
-🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
+Token Forge is a decentralized application (dApp) that demonstrates advanced ERC1155 token minting and forging mechanics. It allows users to mint base tokens, forge new tokens by burning combinations of base tokens, trade tokens, and directly burn forged tokens. Built with Solidity, Hardhat, RainbowKit, WAGMI, and Next.js, this dApp is deployed on the Sepolia testnet (with Mainnet support available).
 
-⚙️ Built using NextJS, RainbowKit, Hardhat, Wagmi, Viem, and Typescript.
+## Overview
 
-- ✅ **Contract Hot Reload**: Your frontend auto-adapts to your smart contract as you edit it.
-- 🪝 **[Custom hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
-- 🧱 [**Components**](https://docs.scaffoldeth.io/components/): Collection of common web3 components to quickly build your frontend.
-- 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
-- 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
+- **7 Token Collection:** Tokens with IDs 0–6.
+- **Minting:**  
+  - **Tokens 0-2 (Base Tokens):** Free to mint (gas fees only) with a 1-minute cooldown per address.
+- **Forging:**  
+  - **Token 3:** Minted by burning 1 unit each of Token 0 and Token 1.  
+  - **Token 4:** Minted by burning 1 unit each of Token 1 and Token 2.  
+  - **Token 5:** Minted by burning 1 unit each of Token 0 and Token 2.  
+  - **Token 6 (Rare Token):** Minted by burning 1 unit each of Tokens 0, 1, and 2. **(Limited to 100 tokens)**
+- **Trading:**  
+  - Any token can be traded for a base token (Tokens 0–2).
+- **Burning:**  
+  - Forged tokens (Tokens 3–6) can be directly burned for nothing.
+- **Network:**  
+  - The dApp runs on the Sepolia testnet (and optionally Mainnet) for cost-effective transactions.
+- **Metadata:**  
+  - Token metadata is hosted on IPFS via Pinata. Make sure your IPFS folder contains correctly named metadata JSON files (e.g. `0.json`, `1.json`, etc.) matching the URI logic.
+- **Wallet Requirement:**  
+  - The app forces usage of MetaMask. If another wallet (e.g., Phantom) is active, users are prompted to disable it.
+- **Network Switch:**  
+  - The dApp auto-prompts a switch to the Sepolia network if you’re not already connected.
 
-![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/b237af0c-5027-4849-a5c1-2e31495cccb1)
+## Deployed Contract Addresses (Sepolia)
 
-## Requirements
+- **ForgeableERC1155:** `0xB8bdf234e02a03f50e9B3E8295308765af87f6c6`  
+- **TokenForge:** `0x2C3c9c4870609A88106481Ca5898208b726530C8`
 
-Before you begin, you need to install the following tools:
+*Note: These addresses are for the Sepolia testnet. Replace them with Mainnet addresses if you deploy there.*
 
-- [Node (>= v20.18.3)](https://nodejs.org/en/download/)
-- Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
-- [Git](https://git-scm.com/downloads)
+## Live Demo & Preview
 
-## Quickstart
+- **Vercel Preview:** [https://my-dapp-demosampleacc-gmailcom-devds-projects-0114b344.vercel.app/](https://my-dapp-demosampleacc-gmailcom-devds-projects-0114b344.vercel.app/)
+- **OpenSea Testnet Account:** [https://testnets.opensea.io/account](https://testnets.opensea.io/account)
 
-To get started with Scaffold-ETH 2, follow the steps below:
+## How It Works
 
-1. Install dependencies if it was skipped in CLI:
+1. **Wallet Connection:**  
+   - Connect your MetaMask wallet. The dApp will prompt you to switch to the Sepolia network if needed.
+2. **Minting Base Tokens:**  
+   - Use the "Free Mint" buttons for Tokens 0–2. Each mint is free (except for gas fees) but limited to one per minute per address.
+3. **Forging New Tokens:**  
+   - Forge new tokens by burning the required base tokens:
+     - **Token 3:** Burns 1 unit of Token 0 and 1 unit of Token 1.
+     - **Token 4:** Burns 1 unit of Token 1 and 1 unit of Token 2.
+     - **Token 5:** Burns 1 unit of Token 0 and 1 unit of Token 2.
+     - **Token 6:** Burns 1 unit each of Tokens 0, 1, and 2 (*Limited to 100 tokens*).
+4. **Trading:**  
+   - Trade any forged token (Tokens 3–6) for a base token (Tokens 0–2) by clicking the appropriate trade button.
+5. **Burning:**  
+   - Directly burn forged tokens (Tokens 3–6) for nothing by specifying the amount to burn.
 
+## Setup & Deployment Instructions
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/your-repo-name.git
+cd your-repo-name
 ```
-cd my-dapp-example
+
+### 2. Install Dependencies
+
+For the Hardhat project:
+
+```bash
+cd packages/hardhat
 yarn install
 ```
 
-2. Run a local network in the first terminal:
+For the Next.js front-end:
 
-```
-yarn chain
-```
-
-This command starts a local Ethereum network using Hardhat. The network runs on your local machine and can be used for testing and development. You can customize the network configuration in `packages/hardhat/hardhat.config.ts`.
-
-3. On a second terminal, deploy the test contract:
-
-```
-yarn deploy
+```bash
+cd ../nextjs
+yarn install
 ```
 
-This command deploys a test smart contract to the local network. The contract is located in `packages/hardhat/contracts` and can be modified to suit your needs. The `yarn deploy` command uses the deploy script located in `packages/hardhat/deploy` to deploy the contract to the network. You can also customize the deploy script.
+### 3. Deploy Smart Contracts
 
-4. On a third terminal, start your NextJS app:
+From the `packages/hardhat` folder, deploy your contracts to the Sepolia network:
+
+```bash
+yarn deploy --network sepolia --tags ForgeContracts
+```
+
+Record the deployed contract addresses (they should match the ones provided above).
+
+### 4. Configure Environment Variables
+
+Create or update your `.env` file in `packages/nextjs` with the following:
 
 ```
+NEXT_PUBLIC_ALCHEMY_API_KEY=yourAlchemyApiKey
+NEXT_PUBLIC_ERC1155_ADDRESS_SEPOLIA=0xB8bdf234e02a03f50e9B3E8295308765af87f6c6
+NEXT_PUBLIC_FORGE_ADDRESS_SEPOLIA=0x2C3c9c4870609A88106481Ca5898208b726530C8
+```
+
+Ensure your `networkAddresses.ts` reflects these addresses correctly.
+
+### 5. Run the Front-End
+
+From the `packages/nextjs` folder, run:
+
+```bash
 yarn start
 ```
 
-Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
+Your dApp should now be accessible at [http://localhost:3000](http://localhost:3000).
 
-Run smart contract test with `yarn hardhat:test`
+## Additional Considerations
 
-- Edit your smart contracts in `packages/hardhat/contracts`
-- Edit your frontend homepage at `packages/nextjs/app/page.tsx`. For guidance on [routing](https://nextjs.org/docs/app/building-your-application/routing/defining-routes) and configuring [pages/layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts) checkout the Next.js documentation.
-- Edit your deployment scripts in `packages/hardhat/deploy`
+- **Sufficient ETH:**  
+  - Ensure your MetaMask wallet has enough Sepolia ETH for gas fees.
+- **Limited Token:**  
+  - Token 6 is limited to 100 mints. Attempts to mint beyond that will fail.
+- **MetaMask Requirement:**  
+  - The dApp enforces the use of MetaMask. If Phantom or another wallet is active, users will be prompted to disable it.
+- **Network Switching:**  
+  - The dApp will automatically prompt you to switch to the Sepolia network if your wallet is on a different chain.
+- **Metadata Availability:**  
+  - If metadata doesn’t load immediately on OpenSea, click “Refresh Metadata” on your collection page or wait a few minutes for indexing.
 
-
-## Documentation
-
-Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building with Scaffold-ETH 2.
-
-To know more about its features, check out our [website](https://scaffoldeth.io).
-
-## Contributing to Scaffold-ETH 2
-
-We welcome contributions to Scaffold-ETH 2!
-
-Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.

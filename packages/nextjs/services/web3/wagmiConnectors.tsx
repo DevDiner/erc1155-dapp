@@ -20,9 +20,10 @@ const wallets = [
   coinbaseWallet,
   rainbowWallet,
   safeWallet,
-  ...(!targetNetworks.some(network => network.id !== (chains.hardhat as chains.Chain).id) || !onlyLocalBurnerWallet
-    ? [rainbowkitBurnerWallet]
-    : []),
+  //By commenting out the following, it removes the hardhat chain as one of the dropdown options
+  //...(!targetNetworks.some(network => network.id !== (chains.hardhat as chains.Chain).id) || !onlyLocalBurnerWallet
+  //   ? [rainbowkitBurnerWallet]
+  //   : []),
 ];
 
 /**

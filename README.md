@@ -1,10 +1,17 @@
 # Token Forge
 
-![alt text](image-2.png)
+![Token Forge Banner](image-2.png)
 
 Token Forge is a decentralized application (dApp) that demonstrates advanced ERC1155 token minting and forging mechanics. It allows users to mint base tokens, forge new tokens by burning combinations of base tokens, trade tokens, and directly burn forged tokens. Built with Solidity, Hardhat, RainbowKit, WAGMI, and Next.js, this dApp is deployed on the Sepolia testnet (with Mainnet support available).
 
-![alt text](image-3.png)![alt text](image-4.png)![alt text](image-5.png)![alt text](image-6.png)![alt text](image-7.png)![alt text](image-8.png)
+<p align="center" style="margin:0;">
+  <img src="image-3.png" alt="Screenshot 3" style="margin:0;" />
+  <img src="image-4.png" alt="Screenshot 4" style="margin:0;" />
+  <img src="image-5.png" alt="Screenshot 5" style="margin:0;" />
+  <img src="image-6.png" alt="Screenshot 6" style="margin:0;" />
+  <img src="image-7.png" alt="Screenshot 7" style="margin:0;" />
+  <img src="image-8.png" alt="Screenshot 8" style="margin:0;" />
+</p>
 
 ## Overview
 
@@ -23,7 +30,7 @@ Token Forge is a decentralized application (dApp) that demonstrates advanced ERC
 - **Network:**  
   - The dApp runs on the Sepolia testnet (and optionally Mainnet) for cost-effective transactions.
 - **Metadata:**  
-  - Token metadata is hosted on IPFS via Pinata. Make sure your IPFS folder contains correctly named metadata JSON files (e.g. `0.json`, `1.json`, etc.) matching the URI logic.
+  - Token metadata is hosted on IPFS via Pinata. Ensure your IPFS folder contains correctly named metadata JSON files (e.g. `0.json`, `1.json`, etc.) matching the URI logic.
 - **Wallet Requirement:**  
   - The app forces usage of MetaMask. If another wallet (e.g., Phantom) is active, users are prompted to disable it.
 - **Network Switch:**  
@@ -122,9 +129,9 @@ Your dApp should now be accessible at [http://localhost:3000](http://localhost:3
 - **Limited Token:**  
   - Token 6 is limited to 100 mints. Attempts to mint beyond that will fail.
 - **MetaMask Requirement:**  
-  - The dApp enforces the use of MetaMask. If Phantom or another wallet is active, users will be prompted to disable it.
+  - The dApp enforces the use of MetaMask. If another wallet (like Phantom) is active, users will be prompted to disable it.
 - **Network Switching:**  
-  - The dApp will automatically prompt you to switch to the Sepolia network if your wallet is on a different chain.
+  - The dApp automatically prompts you to switch to the Sepolia network if your wallet is on a different chain.
 - **Metadata Availability:**  
   - If metadata doesn’t load immediately on OpenSea, click “Refresh Metadata” on your collection page or wait a few minutes for indexing.
 

@@ -3,6 +3,7 @@ dotenv.config();
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-ethers";
 import "@nomicfoundation/hardhat-chai-matchers";
+import "solidity-coverage";
 import "@typechain/hardhat";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
@@ -54,6 +55,7 @@ const config: HardhatUserConfig = {
         url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
         enabled: process.env.MAINNET_FORKING_ENABLED === "true",
       },
+      blockGasLimit: 0x1fffffffffffff, // or '0xFFFFFFFFFFFF' in hex
     },
     mainnet: {
       url: `https://eth-mainnet.g.alchemy.com/v2/${providerApiKey}`,

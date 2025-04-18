@@ -45,7 +45,7 @@ Token Forge is a decentralized application (dApp) that demonstrates advanced ERC
 
 ## Live Demo & Preview
 
-- **Vercel Preview:** [https://my-dapp-demosampleacc-gmailcom-devds-projects-0114b344.vercel.app/](https://my-dapp-demosampleacc-gmailcom-devds-projects-0114b344.vercel.app/)
+- **Vercel Deployment:** [https://my-dapp-liart.vercel.app/](https://my-dapp-csivazcdo-devds-projects-0114b344.vercel.app/)
 - **OpenSea Testnet Account:** [https://testnets.opensea.io/account](https://testnets.opensea.io/account)
 
 ## How It Works

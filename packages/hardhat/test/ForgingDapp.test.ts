@@ -8,11 +8,13 @@ describe("ForgeableERC1155 Direct Tests (All Branches Covered)", function () {
   let deployer: SignerWithAddress;
   let addr1: SignerWithAddress;
   let addr2: SignerWithAddress;
-  let addrs: SignerWithAddress[];
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  /*let addrs: SignerWithAddress[];*/
   let forgeable: ForgeableERC1155;
 
   beforeEach(async function () {
-    [deployer, addr1, addr2, ...addrs] = await ethers.getSigners();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    [deployer, addr1, addr2, /*..._addrs*/] = await ethers.getSigners();
     // Deploy from scratch for each test
     await deployments.fixture(["ForgeContracts"]);
     forgeable = (await ethers.getContract("ForgeableERC1155", deployer)) as ForgeableERC1155;

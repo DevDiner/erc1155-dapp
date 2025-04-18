@@ -6,3 +6,5 @@ node_modules/
 typechain-types
 # files
 **/*.json
+test/ForgingDapp.test.ts
+

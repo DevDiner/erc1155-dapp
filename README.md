@@ -59,8 +59,8 @@ The test report can be found in TESTING_REPORT.md, providing detailed informatio
 
 ## Deployed Contract Addresses (Sepolia)
 
-- **ForgeableERC1155:** `0xB8bdf234e02a03f50e9B3E8295308765af87f6c6`  
-- **TokenForge:** `0x2C3c9c4870609A88106481Ca5898208b726530C8`
+- **ForgeableERC1155:** [0xB8bdf234e02a03f50e9B3E8295308765af87f6c6](https://sepolia.etherscan.io/address/0xB8bdf234e02a03f50e9B3E8295308765af87f6c6#writeContract) 
+- **TokenForge:** [0x2C3c9c4870609A88106481Ca5898208b726530C8](https://sepolia.etherscan.io/address/0x2C3c9c4870609A88106481Ca5898208b726530C8#writeContract)
 
 *Note: These addresses are for the Sepolia testnet. Replace them with Mainnet addresses if you deploy there.*
 

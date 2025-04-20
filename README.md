@@ -1,17 +1,38 @@
 # Token Forge
 
-![Token Forge Banner](image-2.png)
+![Token Forge Banner](./assets/image-2.png)
 
 Token Forge is a decentralized application (dApp) that demonstrates advanced ERC1155 token minting and forging mechanics. It allows users to mint base tokens, forge new tokens by burning combinations of base tokens, trade tokens, and directly burn forged tokens. Built with Solidity, Hardhat, RainbowKit, WAGMI, and Next.js, this dApp is deployed on the Sepolia testnet (with Mainnet support available).
 
 <p align="center" style="margin:0;">
-  <img src="image-3.png" alt="Screenshot 3" style="margin:0;" />
-  <img src="image-4.png" alt="Screenshot 4" style="margin:0;" />
-  <img src="image-5.png" alt="Screenshot 5" style="margin:0;" />
-  <img src="image-6.png" alt="Screenshot 6" style="margin:0;" />
-  <img src="image-7.png" alt="Screenshot 7" style="margin:0;" />
-  <img src="image-8.png" alt="Screenshot 8" style="margin:0;" />
+  <img src="./assets/image-3.png" alt="Screenshot 3" style="margin:0;" />
+  <img src="./assets/image-4.png" alt="Screenshot 4" style="margin:0;" />
+  <img src="./assets/image-5.png" alt="Screenshot 5" style="margin:0;" />
+  <img src="./assets/image-6.png" alt="Screenshot 6" style="margin:0;" />
+  <img src="./assets/image-7.png" alt="Screenshot 7" style="margin:0;" />
+  <img src="./assets/image-8.png" alt="Screenshot 8" style="margin:0;" />
 </p>
+
+## Skills Demonstrated
+
+- **Blockchain Development:**
+Proficient use of Solidity for ERC1155 token creation and forging mechanics. Hands-on experience with smart contract deployment using Hardhat and integration with the Sepolia testnet. The smart contracts support minting (Tokens 0–2), forging (Tokens 3–6), trading, and burning of tokens.
+
+- **Web3 Integration:**
+Utilized WAGMI and RainbowKit for seamless Web3 connectivity with MetaMask, enabling the connection, transaction, and wallet interaction with the dApp.
+
+- **Smart Contract Security:**
+Ensured contract security using OpenZeppelin libraries such as Ownable, ERC1155, and ReentrancyGuard. Developed safe functions to mint, forge, trade, and burn tokens while preventing reentrancy attacks.
+
+- **Frontend Development:**
+Built a user-friendly frontend using Next.js with a focus on responsive design and smooth UX/UI. Integrated real-time blockchain data using ethers.js to manage minting, forging, trading, and burning actions directly from the user interface. Additionally, implemented toast notifications for providing users with real-time feedback on their actions, such as successful transactions or errors.
+
+- **IPFS for NFTs:**
+Proficient use of IPFS for decentralized storage of NFTs. All token metadata, including images, is stored and pinned on Pinata/IPFS nodes. The use of IPFS ensures that token information (such as names, descriptions, and images) remains decentralized and immutable, facilitating the minting (for Tokens 0–2), forging (Tokens 3–6), burning, and trading mechanisms within the dApp.
+
+- **Testing and Unit Testing:**
+We performed unit testing for the ForgeableERC1155 smart contract, which handles the core forging logic. The test scripts are located in packages/hardhat/test/ForgingDapp.test.ts.
+The test report can be found in TESTING_REPORT.md, providing detailed information on the testing outcomes.
 
 ## Overview
 
@@ -121,6 +142,9 @@ yarn start
 ```
 
 Your dApp should now be accessible at [http://localhost:3000](http://localhost:3000).
+
+## Unit Testing
+Unit tests have been written for the core logic of the smart contract, particularly the forging mechanisms, in the *packages/hardhat/test/ForgingDapp.test.ts* file. The testing suite ensures the robustness and reliability of the contract’s functionality, covering all key actions such as minting, forging, and burning of tokens. For a detailed overview of the tests and their results, refer to the TESTING_REPORT.md file.
 
 ## Additional Considerations
 
